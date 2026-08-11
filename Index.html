@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>// don't look away</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Style.css">
+</head>
+
+<body>
+    <div inputmode="menuScreen">
+        <h1>// don't look away</h1>
+        <p>pick a language to code in</p>
+
+        <div class="lang-options">
+            <button class="lang-btn" onclick="startGame('javascript')">JavaScript</button>
+            <button class="lang-btn" onclick="startGame('python')">Python</button>
+            <button class="lang-btn" onclick="startGame('c++')">C++</button>
+            <button class="lang-btn" onclick="startGame('java')">Java</button>
+        </div>
+    </div>
+
+    <div id="topbar" class="hidden">
+        <h1>don't look away</h1>
+        <div class="stats">
+            <span id="nightLabel">night 1</span>
+            <span id="survivedLabel">survived: 0</span>
+        </div>
+    </div>
+
+    <div id="gameContainer" class="hidden">
+
+        <div class="editor-panel">
+            <h2 id="editorFilename">editor.js</h2>
+            <div id="puzzleBox"></div>
+        </div>
+
+        <div id="reflectionPanel">
+            <h2>window.reflection</h2>
+
+            <div class="reflection-window">
+                <div class="grain"></div>
+                <div id="figure"></div>
+            </div>
+
+            <div class="closeness-bar">
+                <div id="closenessFill"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="jumpscare">
+        <h1>IT SAW YOU</h1>
+    </div>
+
+    <script src="Script.js"></script>
+
+</body>
+
+</html>
