@@ -12,7 +12,7 @@ function startGame(lang) {
 
     document.getElementById('menuScreen').classList.add('hidden');
     document.getElementById('topbar').classList.remove('hidden');
-    document.getElementById('gameContainer').classList.remove('hiddem');
+    document.getElementById('gameContainer').classList.remove('hidden');
 
     document.getElementById('editorFilename').textContent = filenames[lang];
 }
