@@ -87,3 +87,7 @@ body {
     border-color: #33ff33;
     color: #33ff33;
 }
+
+.hidden {
+    display: none;
+}
