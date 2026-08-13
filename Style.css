@@ -91,3 +91,55 @@ body {
 .hidden {
     display: none !important;
 }
+
+#topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #111111;
+    border: 1px solid #222222;
+}
+
+#topbar h1 {
+    font-size: 18px;
+    font-weight: normal;
+    color: #33ff33;
+}
+
+.stats {
+    display: flex;
+    gap: 20px;
+    font-size: 14px;
+    color: #888888;
+}
+
+#gameContainer {
+    display: flex;
+    height: calc(100vh - 50px);
+}
+
+.editor-panel {
+    flex: 2;
+    padding: 20px;
+    background-color: #0d0d0d;
+    border-right: 1px solid #222222;
+    display: flex;
+    flex-direction: column;
+}
+
+#editorFilename {
+    color: #33ff33;
+    font-size: 14px;
+    font-weight: normal;
+    opacity: 0.7;
+    margin-bottom: 15px;
+}
+
+#puzzleBox {
+    flex: 1;
+    background-color: #111111;
+    border: 1px solid #1f1f1f;
+    border-radius: 4px;
+    padding: 15px;
+}
