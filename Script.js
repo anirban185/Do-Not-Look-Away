@@ -185,7 +185,7 @@ function loadPuzzle(puzzle) {
         btn.textContent = opt;
 
         btn.addEventListener('click', function () {
-            checkAnswer(opt, puzzle.answer);
+            checkAnswer(btn, opt, puzzle.answer);
         });
 
         optionsDiv.appendChild(btn);
@@ -194,11 +194,27 @@ function loadPuzzle(puzzle) {
     box.appendChild(optionsDiv);
 }
 
-function checkAnswer(picked, correct) {
+function checkAnswer(btn, picked, correct) {
+    const allButtons = btn.parentElement.querySelectorAll('.options-btn');
+    allButtons.forEach(function (b) {
+        b.disabled = true;
+    });
+
     if (picked === correct) {
-        nextPuzzle();
+        btn.classList.add('correct');
+
+        setTimeout(function () {
+            nextPuzzle();
+        }, 600);
     } else {
-        console.log('nope, try again');
+        btn.classList.add('wrong');
+
+        setTimeout(function () {
+            btn.classList.remove('wrong');
+            allButtons.forEach(function (b) {
+                b.disabled = false;
+            });
+        }, 500);
     }
 }
 
