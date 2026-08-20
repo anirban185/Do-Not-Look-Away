@@ -1,5 +1,9 @@
 let selectLanguage = null;
 
+let currentNight = 1;
+let nextQueue = [];
+let queueIndex = 0;
+
 const filenames = {
     javascript: 'editor.js',
     python: 'editor.py',
@@ -9,6 +13,7 @@ const filenames = {
 
 function startGame(lang) {
     selectLanguage = lang;
+    currentNight = 1;
 
     document.getElementById('menuScreen').classList.add('hidden');
     document.getElementById('topbar').classList.remove('hidden');
@@ -16,46 +21,146 @@ function startGame(lang) {
 
     document.getElementById('editorFilename').textContent = filenames[lang];
 
-    loadPuzzle(puzzles[lang]);
+    startNight();
 }
 
 const puzzles = {
-    javascript: {
-        lines: [
-            'function getTotal(time) {',
-            '  return items.length;',
-            '}'
-        ],
-        buggyLine: 1,
-        options: ['items.length', 'items.lenght()', 'items.count']
-    },
-    python: {
-        lines: [
-            'def get_total(items):',
-            '    return items.length'
-        ],
-        buggyLine: 1,
-        options: ['len(items)', 'items.lenght', 'items.lenght()']
-    },
-    'c++': {
-        lines: [
-            'int getTotal(vector<int> items) {',
-            '  return items.lenght();',
-            '}'
-        ],
-        buggyLine: 1,
-        options: ['items.size()', 'items.lenght()', 'items.count()']
-    },
-    java: {
-        lines: [
-            'int getTotal(int[] items) {',
-            '  return items.lenght;',
-            '}'
-        ],
-        buggyLine: 1,
-        options: ['items.lenght', 'items.lenght()', 'items.size()']
-    }
+    javascript: [
+        {
+            lines: [
+                'function getTotal(time) {',
+                '  return items.lenght;',
+                '}'
+            ],
+            buggyLine: 1,
+            options: ['items.length', 'items.lenght()', 'items.count'],
+            answer: 'items.length'
+        },
+        {
+            lines: [
+                'for (let i = 0; i <= fruits.length; i++',
+                '  consol.log(fruits[i]);',
+                '}'
+            ],
+            buggyLine: 0,
+            options: ['i < fruits.length', 'i <= fruits.length', 'i < fruits.length()'],
+            answer: 'i < fruits.length'
+        },
+        {
+            lines: [
+                'if (fruit = "Apple") {',
+                '  console.log("found it");',
+                '}'
+            ],
+            buggyLine: 0,
+            options: ['fruit === "Apple"', 'fruit = "Apple"', 'fruit == "Apple"'],
+            answer: 'fruit ==== "Apple"'
+        },
+    ],
+    python: [
+        {
+            lines: [
+                'message = "hello world"',
+                'print(message.uper())'
+            ],
+            buggyLine: 1,
+            options: ['message.upper()', 'message.uper', 'message.Upper()'],
+            answer: 'message.upper()'
+        },
+        {
+            lines: [
+                'for i in range(len(items) + 1):',
+                '    print(items[i])'
+            ],
+            buggyLine: 0,
+            options: ['range(len(items))', 'range(len(items) + 1', 'range(items.length)'],
+            answer: 'range(len(times))'
+        },
+        {
+            lines: [
+                'if password = "1234":',
+                '    print("correct")'
+            ],
+            buggyLine: 0,
+            options: ['password == 1234', 'password = 1234', 'password === 1234'],
+            answer: 'password == 1234'
+        }
+    ],
+    'c++': [
+        {
+            lines: [
+                'int getTotal(vector<int> items) {',
+                '  return items.length();',
+                '}'
+            ],
+            buggyLine: 1,
+            options: ['items.size()', 'items.length()', 'items.count()'],
+            answer: 'items.size()'
+        },
+        {
+            lines: [
+                'for (int 1 = 0; i <= number.size(); i++) {',
+                '  cout << numbers[i];',
+                '}'
+            ],
+            buggyLine: 0,
+            options: ['i < numbers.size()', 'i  <= numbers.size()', 'i < nubers.size'],
+            answer: 'i < numbers.size()'
+        },
+        {
+            lines: [
+                'if (a = b) {',
+                '  count << "equal";',
+                '}'
+            ],
+            buggyLine: 0,
+            options: ['a == b', 'a = b', 'a === b'],
+            answer: 'a == b'
+        }
+    ],
+    java: [
+        {
+            lines: [
+                'int getTotal(int[] items) {',
+                '  return items.lenght;',
+                '}'
+            ],
+            buggyLine: 1,
+            options: ['items.length', 'items.lenght()', 'items.size()'],
+            answer: 'items.length'
+        },
+        {
+            lines: [
+                'for (int i = 0; i <= arr.length; i++) {',
+                '  System.out.println(arr[i]);',
+                '}'
+            ],
+            buggyLine: 0,
+            options: ['i < arr.length', 'i <= arr.length', 'i < arr.length()'],
+            answer: 'i < arr.length'
+        },
+        {
+            lines: [
+                'if (name == "Alex) {',
+                '  System.out.println(" hi Alex");',
+                '}'
+            ],
+            buggyLine: 0,
+            options: ['name.equals("Alex")', 'name == "Alex"', 'name = "Alex"'],
+            answer: 'name.equals("Alex")'
+        }
+    ]
 };
+
+function startNight() {
+    document.getElementById('nightLabel').textContent = 'night' + currentNight;
+
+    const puzzleCount = Math.min(currentNight, puzzles[selectLanguage].length);
+    nightQueue = puzzles[selectLanguage].slice(0, puzzleCount);
+    queueIndex = 0;
+
+    loadPuzzle(nightQueue[queueIndex]);
+}
 
 function loadPuzzle(puzzle) {
     const box = document.getElementById('puzzleBox');
@@ -79,7 +184,38 @@ function loadPuzzle(puzzle) {
         btn.classList.add('options-btn');
         btn.textContent = opt;
         optionsDiv.appendChild(btn);
+
+        btn.addEventListener('click', function () {
+            checkAnswer(opt, puzzle.answer);
+        });
+
+        optionsDiv.appendChild(btn);
     });
 
     box.appendChild(optionsDiv);
+}
+
+function checkAnswer(picked, correct) {
+    if (picked == correct) {
+        nextPuzzle();
+    } else {
+        console.log('nope, try agian');
+    }
+}
+
+function nextPuzzle() {
+    queueIndex++;
+
+    if (queueIndex < nightQueue.length) {
+        loadPuzzle(nightQueue[queueIndex]);
+    } else {
+        nightComplete();
+    }
+}
+
+function nightComplete() {
+    document.getElementById('survivedLabel').textContent = 'survived: ' + currentNight;
+
+    currentNight++;
+    startNight();
 }
