@@ -1,7 +1,7 @@
 let selectLanguage = null;
 
 let currentNight = 1;
-let nextQueue = [];
+let nightQueue = [];
 let queueIndex = 0;
 
 const filenames = {
@@ -28,7 +28,7 @@ const puzzles = {
     javascript: [
         {
             lines: [
-                'function getTotal(time) {',
+                'function getTotal(items) {',
                 '  return items.lenght;',
                 '}'
             ],
@@ -38,8 +38,8 @@ const puzzles = {
         },
         {
             lines: [
-                'for (let i = 0; i <= fruits.length; i++',
-                '  consol.log(fruits[i]);',
+                'for (let i = 0; i <= fruits.length; i++) {',
+                '  console.log(fruits[i]);',
                 '}'
             ],
             buggyLine: 0,
@@ -54,8 +54,8 @@ const puzzles = {
             ],
             buggyLine: 0,
             options: ['fruit === "Apple"', 'fruit = "Apple"', 'fruit == "Apple"'],
-            answer: 'fruit ==== "Apple"'
-        },
+            answer: 'fruit === "Apple"'
+        }
     ],
     python: [
         {
@@ -64,7 +64,7 @@ const puzzles = {
                 'print(message.uper())'
             ],
             buggyLine: 1,
-            options: ['message.upper()', 'message.uper', 'message.Upper()'],
+            options: ['message.upper()', 'message.uper()', 'message.Upper()'],
             answer: 'message.upper()'
         },
         {
@@ -73,8 +73,8 @@ const puzzles = {
                 '    print(items[i])'
             ],
             buggyLine: 0,
-            options: ['range(len(items))', 'range(len(items) + 1', 'range(items.length)'],
-            answer: 'range(len(times))'
+            options: ['range(len(items))', 'range(len(items) + 1)', 'range(items.length)'],
+            answer: 'range(len(items))'
         },
         {
             lines: [
@@ -82,8 +82,8 @@ const puzzles = {
                 '    print("correct")'
             ],
             buggyLine: 0,
-            options: ['password == 1234', 'password = 1234', 'password === 1234'],
-            answer: 'password == 1234'
+            options: ['password == "1234"', 'password = "1234"', 'password === "1234"'],
+            answer: 'password == "1234"'
         }
     ],
     'c++': [
@@ -99,18 +99,18 @@ const puzzles = {
         },
         {
             lines: [
-                'for (int 1 = 0; i <= number.size(); i++) {',
+                'for (int i = 0; i <= numbers.size(); i++) {',
                 '  cout << numbers[i];',
                 '}'
             ],
             buggyLine: 0,
-            options: ['i < numbers.size()', 'i  <= numbers.size()', 'i < nubers.size'],
+            options: ['i < numbers.size()', 'i <= numbers.size()', 'i < numbers.size'],
             answer: 'i < numbers.size()'
         },
         {
             lines: [
                 'if (a = b) {',
-                '  count << "equal";',
+                '  cout << "equal";',
                 '}'
             ],
             buggyLine: 0,
@@ -141,8 +141,8 @@ const puzzles = {
         },
         {
             lines: [
-                'if (name == "Alex) {',
-                '  System.out.println(" hi Alex");',
+                'if (name == "Alex") {',
+                '  System.out.println("hi Alex");',
                 '}'
             ],
             buggyLine: 0,
@@ -153,7 +153,7 @@ const puzzles = {
 };
 
 function startNight() {
-    document.getElementById('nightLabel').textContent = 'night' + currentNight;
+    document.getElementById('nightLabel').textContent = 'night ' + currentNight;
 
     const puzzleCount = Math.min(currentNight, puzzles[selectLanguage].length);
     nightQueue = puzzles[selectLanguage].slice(0, puzzleCount);
@@ -169,7 +169,7 @@ function loadPuzzle(puzzle) {
     puzzle.lines.forEach(function (line, i) {
         const lineDiv = document.createElement('div');
         lineDiv.classList.add('code-line');
-        if (i == puzzle.buggyLine) {
+        if (i === puzzle.buggyLine) {
             lineDiv.classList.add('buggy');
         }
         lineDiv.textContent = line;
@@ -183,7 +183,6 @@ function loadPuzzle(puzzle) {
         const btn = document.createElement('button');
         btn.classList.add('options-btn');
         btn.textContent = opt;
-        optionsDiv.appendChild(btn);
 
         btn.addEventListener('click', function () {
             checkAnswer(opt, puzzle.answer);
@@ -196,10 +195,10 @@ function loadPuzzle(puzzle) {
 }
 
 function checkAnswer(picked, correct) {
-    if (picked == correct) {
+    if (picked === correct) {
         nextPuzzle();
     } else {
-        console.log('nope, try agian');
+        console.log('nope, try again');
     }
 }
 
