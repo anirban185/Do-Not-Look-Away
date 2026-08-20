@@ -181,3 +181,43 @@ body {
     border-color: #33ff33;
     color: #33ff33;
 }
+
+.options-btn.correct {
+    background-color: rgba(51, 255, 51, 0.15);
+    border-color: #33ff33;
+    color: #33ff33;
+}
+
+.options-btn.wrong {
+    background-color: rgba(255, 51, 51, 0.15);
+    border-color: #ff3333;
+    color: #ff3333;
+    animation: shake 0.3s;
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-4px);
+    }
+
+    50% {
+        transform: translateX(4px);
+    }
+
+    75% {
+        transform: translateX(-4px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.options-btn:disabled {
+    cursor: default;
+    opacity: 0.7;
+}
