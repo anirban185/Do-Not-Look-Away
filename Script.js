@@ -4,6 +4,10 @@ let currentNight = 1;
 let nightQueue = [];
 let queueIndex = 0;
 
+let closeness = 0;
+let inReflection = false;
+let closenessInterval = null;
+
 const filenames = {
     javascript: 'editor.js',
     python: 'editor.py',
@@ -20,6 +24,11 @@ function startGame(lang) {
     document.getElementById('gameContainer').classList.remove('hidden');
 
     document.getElementById('editorFilename').textContent = filenames[lang];
+
+    if (!closenessInterval) {
+        reflectionTracking();
+        closenessInterval = setInterval(tickCloseness, 100);
+    }
 
     startNight();
 }
@@ -155,6 +164,9 @@ const puzzles = {
 function startNight() {
     document.getElementById('nightLabel').textContent = 'night ' + currentNight;
 
+    closeness = 0;
+    updateClosenessBar();
+
     const puzzleCount = Math.min(currentNight, puzzles[selectLanguage].length);
     nightQueue = puzzles[selectLanguage].slice(0, puzzleCount);
     queueIndex = 0;
@@ -233,4 +245,52 @@ function nightComplete() {
 
     currentNight++;
     startNight();
+}
+
+function reflectionTracking() {
+    const relfWindow = document.querySelector('.reflection-window');
+
+    relfWindow.addEventListener('mouseenter', function () {
+        inReflection = true;
+    });
+
+    relfWindow.addEventListener('mouseleave', function () {
+        inReflection = false;
+    });
+}
+
+function tickCloseness() {
+    if (inReflection) {
+        closeness -= 2;
+    } else {
+        closeness += 0.6;
+    }
+
+    if (closeness > 100) {
+        closeness = 100;
+    }
+
+    updateClosenessBar();
+
+    if (closeness >= 100) {
+        triggerJumpscare();
+    }
+}
+
+function updateClosenessBar() {
+    document.getElementById('closenessFill').style.width = closeness + '%';
+
+    const figure = document.getElementById('figure');
+    figure.style.opacity = 0.3 + (closeness / 100) * 0.6;
+    figure.style.transform = 'translateX(-50%) scale(' + (1 + closeness / 150) + ')';
+}
+
+function triggerJumpscare() {
+    document.getElementById('jumpscare').classList.remove('hidden');
+    document.getElementById('jumpscare').style.display = 'flex';
+
+    setTimeout(function () {
+        document.getElementById('jumpscare').style.display = 'none';
+        startNight();
+    }, 1500);
 }
