@@ -42,7 +42,6 @@ const puzzles = {
                 '}'
             ],
             buggyLine: 1,
-            options: ['items.length', 'items.lenght()', 'items.count'],
             answer: 'items.length'
         },
         {
@@ -52,7 +51,6 @@ const puzzles = {
                 '}'
             ],
             buggyLine: 0,
-            options: ['i < fruits.length', 'i <= fruits.length', 'i < fruits.length()'],
             answer: 'i < fruits.length'
         },
         {
@@ -62,7 +60,6 @@ const puzzles = {
                 '}'
             ],
             buggyLine: 0,
-            options: ['fruit === "Apple"', 'fruit = "Apple"', 'fruit == "Apple"'],
             answer: 'fruit === "Apple"'
         }
     ],
@@ -73,7 +70,6 @@ const puzzles = {
                 'print(message.uper())'
             ],
             buggyLine: 1,
-            options: ['message.upper()', 'message.uper()', 'message.Upper()'],
             answer: 'message.upper()'
         },
         {
@@ -82,7 +78,6 @@ const puzzles = {
                 '    print(items[i])'
             ],
             buggyLine: 0,
-            options: ['range(len(items))', 'range(len(items) + 1)', 'range(items.length)'],
             answer: 'range(len(items))'
         },
         {
@@ -91,7 +86,6 @@ const puzzles = {
                 '    print("correct")'
             ],
             buggyLine: 0,
-            options: ['password == "1234"', 'password = "1234"', 'password === "1234"'],
             answer: 'password == "1234"'
         }
     ],
@@ -103,7 +97,6 @@ const puzzles = {
                 '}'
             ],
             buggyLine: 1,
-            options: ['items.size()', 'items.length()', 'items.count()'],
             answer: 'items.size()'
         },
         {
@@ -113,7 +106,6 @@ const puzzles = {
                 '}'
             ],
             buggyLine: 0,
-            options: ['i < numbers.size()', 'i <= numbers.size()', 'i < numbers.size'],
             answer: 'i < numbers.size()'
         },
         {
@@ -123,7 +115,6 @@ const puzzles = {
                 '}'
             ],
             buggyLine: 0,
-            options: ['a == b', 'a = b', 'a === b'],
             answer: 'a == b'
         }
     ],
@@ -135,7 +126,6 @@ const puzzles = {
                 '}'
             ],
             buggyLine: 1,
-            options: ['items.length', 'items.lenght()', 'items.size()'],
             answer: 'items.length'
         },
         {
@@ -145,7 +135,6 @@ const puzzles = {
                 '}'
             ],
             buggyLine: 0,
-            options: ['i < arr.length', 'i <= arr.length', 'i < arr.length()'],
             answer: 'i < arr.length'
         },
         {
@@ -155,7 +144,6 @@ const puzzles = {
                 '}'
             ],
             buggyLine: 0,
-            options: ['name.equals("Alex")', 'name == "Alex"', 'name = "Alex"'],
             answer: 'name.equals("Alex")'
         }
     ]
@@ -181,52 +169,60 @@ function loadPuzzle(puzzle) {
     puzzle.lines.forEach(function (line, i) {
         const lineDiv = document.createElement('div');
         lineDiv.classList.add('code-line');
+        lineDiv.textContent = line;
+
         if (i === puzzle.buggyLine) {
             lineDiv.classList.add('buggy');
+
+            lineDiv.addEventListener('click', function () {
+                openFixInput(lineDiv, puzzle);
+            });
         }
-        lineDiv.textContent = line;
+
         box.appendChild(lineDiv);
     });
-
-    const optionsDiv = document.createElement('div');
-    optionsDiv.classList.add('options');
-
-    puzzle.options.forEach(function (opt) {
-        const btn = document.createElement('button');
-        btn.classList.add('options-btn');
-        btn.textContent = opt;
-
-        btn.addEventListener('click', function () {
-            checkAnswer(btn, opt, puzzle.answer);
-        });
-
-        optionsDiv.appendChild(btn);
-    });
-
-    box.appendChild(optionsDiv);
 }
 
-function checkAnswer(btn, picked, correct) {
-    const allButtons = btn.parentElement.querySelectorAll('.options-btn');
-    allButtons.forEach(function (b) {
-        b.disabled = true;
-    });
+function openFixInput(lineDiv, puzzle) {
+    if (lineDiv.querySelector('input')) {
+        return;
+    }
 
-    if (picked === correct) {
-        btn.classList.add('correct');
+    lineDiv.textContent = '';
+
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.classList.add('fix-input');
+    input.placeholder = 'type the fix...';
+    lineDiv.appendChild(input);
+    input.focus();
+
+    input.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+            checkAnswer(lineDiv, input, puzzle);
+        }
+    });
+}
+
+function checkAnswer(lineDiv, input, puzzle) {
+    const typed = input.value.trim();
+
+    if (typed === puzzle.answer) {
+        input.disabled = true;
+        lineDiv.classList.remove('wrong');
+        lineDiv.classList.remove('buggy');
+        lineDiv.classList.add('correct');
 
         setTimeout(function () {
             nextPuzzle();
         }, 600);
     } else {
-        btn.classList.add('wrong');
+        lineDiv.classList.add('wrong');
+        input.value = '';
 
         setTimeout(function () {
-            btn.classList.remove('wrong');
-            allButtons.forEach(function (b) {
-                b.disabled = false;
-            });
-        }, 500);
+            lineDiv.classList.remove('wrong');
+        }, 400);
     }
 }
 
