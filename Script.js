@@ -427,6 +427,10 @@ function tickCloseness() {
         closeness = 100;
     }
 
+    if (closeness < 0) {
+        closeness = 0;
+    }
+
     updateClosenessBar();
 
     if (closeness >= 100) {
