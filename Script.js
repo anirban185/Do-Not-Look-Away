@@ -5,8 +5,11 @@ let nightQueue = [];
 let queueIndex = 0;
 
 let closeness = 0;
-let inReflection = false;
+let mouseX = window.innerWidth / 2;
+let mouseY = window.innerHeight / 2;
 let closenessInterval = null;
+
+const torchRadius = 200;
 
 const filenames = {
     javascript: 'editor.js',
@@ -26,9 +29,12 @@ function startGame(lang) {
     document.getElementById('editorFilename').textContent = filenames[lang];
 
     if (!closenessInterval) {
-        reflectionTracking();
+        torchTracking();
         closenessInterval = setInterval(tickCloseness, 100);
     }
+
+    document.getElementById('dark').classList.remove('hidden');
+    document.getElementById('glow').classList.remove('hidden');
 
     startNight();
 }
@@ -243,20 +249,38 @@ function nightComplete() {
     startNight();
 }
 
-function reflectionTracking() {
-    const relfWindow = document.querySelector('.reflection-window');
-
-    relfWindow.addEventListener('mouseenter', function () {
-        inReflection = true;
+function torchTracking() {
+    document.addEventListener('mousemove', function (e) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        document.documentElement.style.setProperty('--x', mouseX + 'px');
+        document.documentElement.style.setProperty('--y', mouseY + 'px');
     });
 
-    relfWindow.addEventListener('mouseleave', function () {
-        inReflection = false;
+    document.addEventListener('mouseleave', function () {
+        document.body.classList.add('noTorch');
+    });
+
+    document.addEventListener('mouseenter', function () {
+        document.body.classList.remove('noTorch');
     });
 }
 
+function torchOnFigure() {
+    const figure = document.getElementById('figure');
+    const rect = figure.getBoundingClientRect();
+    const figureX = rect.left + rect.width / 2;
+    const figureY = rect.top + rect.height / 2;
+
+    const dx = mouseX - figureX;
+    const dy = mouseY - figureY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    return distance < torchRadius;
+}
+
 function tickCloseness() {
-    if (inReflection) {
+    if (torchOnFigure()) {
         closeness -= 2;
     } else {
         closeness += 0.6;
