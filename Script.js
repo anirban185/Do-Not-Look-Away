@@ -133,7 +133,7 @@ const puzzles = {
             lines: [
                 'age = 20',
                 'if age >= 18:',
-                '    print("adult"'
+                '    print("adult")'
             ],
             buggyLine: 1,
             answer: 'if age >= 18:'
@@ -214,7 +214,7 @@ const puzzles = {
                 '}'
             ],
             buggyLine: 1,
-            answer: 'return x * x;'
+            answer: '  return x * x;'
         }
     ],
     java: [
