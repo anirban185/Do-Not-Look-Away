@@ -179,13 +179,27 @@ body {
 }
 
 .fix-input {
+    display: block;
+    width: 100%;
+    min-width: 0;
     background-color: #050505;
     color: #33ff33;
     border: 1px solid #33ff33;
     font-family: 'Courier New', monospace;
     font-size: 15px;
-    padding: 4px 8px;
-    width: 250px;
+    padding: 6px 10px;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.fix-input:focus {
+    outline: none;
+}
+
+.fix-input:disabled {
+    background-color: transparent;
+    border: none;
+    color: #33ff33;
 }
 
 .fix-input:focus {

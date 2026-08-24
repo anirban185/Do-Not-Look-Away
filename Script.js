@@ -333,7 +333,7 @@ function openFixInput(lineDiv, puzzle) {
 
     const currentLine = puzzle.lines[puzzle.buggyLine];
 
-    lineDiv.textContent = '';
+    lineDiv.innerHTML = '';
 
     const input = document.createElement('input');
     input.type = 'text';
@@ -341,8 +341,8 @@ function openFixInput(lineDiv, puzzle) {
     input.value = currentLine;
 
     lineDiv.appendChild(input);
-    input.focus();
 
+    input.focus();
     input.setSelectionRange(input.value.length, input.value.length);
 
     input.addEventListener('keydown', function (e) {
@@ -354,9 +354,11 @@ function openFixInput(lineDiv, puzzle) {
 
 function checkAnswer(lineDiv, input, puzzle) {
     const typed = input.value.trim();
+    const correct = puzzle.answer.trim();
 
-    if (typed === puzzle.answer) {
+    if (typed === correct) {
         input.disabled = true;
+
         lineDiv.classList.remove('wrong');
         lineDiv.classList.remove('buggy');
         lineDiv.classList.add('correct');
@@ -366,11 +368,13 @@ function checkAnswer(lineDiv, input, puzzle) {
         }, 600);
     } else {
         lineDiv.classList.add('wrong');
-        input.value = '';
 
         setTimeout(function () {
             lineDiv.classList.remove('wrong');
         }, 400);
+
+        input.focus();
+        input.setSelectionRange(input.value.length, input.value.length);
     }
 }
 
