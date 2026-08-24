@@ -331,14 +331,19 @@ function openFixInput(lineDiv, puzzle) {
         return;
     }
 
+    const currentLine = puzzle.lines[puzzle.buggyLine];
+
     lineDiv.textContent = '';
 
     const input = document.createElement('input');
     input.type = 'text';
     input.classList.add('fix-input');
-    input.placeholder = 'type the fix...';
+    input.value = currentLine;
+
     lineDiv.appendChild(input);
     input.focus();
+
+    input.setSelectionRange(input.value.length, input.value.length);
 
     input.addEventListener('keydown', function (e) {
         if (e.key === 'Enter') {
