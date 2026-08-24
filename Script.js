@@ -48,7 +48,7 @@ const puzzles = {
                 '}'
             ],
             buggyLine: 1,
-            answer: 'items.length'
+            answer: '  return items.length;'
         },
         {
             lines: [
@@ -57,7 +57,7 @@ const puzzles = {
                 '}'
             ],
             buggyLine: 0,
-            answer: 'i < fruits.length'
+            answer: 'for (let i = 0; i < fruits.length; i++) {'
         },
         {
             lines: [
@@ -66,7 +66,42 @@ const puzzles = {
                 '}'
             ],
             buggyLine: 0,
-            answer: 'fruit === "Apple"'
+            answer: 'if (fruit === "Apple") {'
+        },
+        {
+            lines: [
+                'let result = 0 / 0;',
+                'if (result == NaN) {',
+                '  console.log("invalid");',
+                '}'
+            ],
+            buggyLine: 1,
+            answer: 'if (Number.isNaN(result)) {'
+        },
+        {
+            lines: [
+                'let arr = [1, 2, 3];',
+                'console.log(arr[3]);'
+            ],
+            buggyLine: 1,
+            answer: 'console.log(arr[2]);'
+        },
+        {
+            lines: [
+                'function square(x) {',
+                '  x * x;',
+                '}'
+            ],
+            buggyLine: 1,
+            answer: '  return x * x;'
+        },
+        {
+            lines: [
+                'let name = "Sam";',
+                'console.log("hi " + Name);'
+            ],
+            buggyLine: 1,
+            answer: 'console.log("hi " + name);'
         }
     ],
     python: [
@@ -76,7 +111,7 @@ const puzzles = {
                 'print(message.uper())'
             ],
             buggyLine: 1,
-            answer: 'message.upper()'
+            answer: 'print(message.upper())'
         },
         {
             lines: [
@@ -84,7 +119,7 @@ const puzzles = {
                 '    print(items[i])'
             ],
             buggyLine: 0,
-            answer: 'range(len(items))'
+            answer: 'for i in range(len(items)):'
         },
         {
             lines: [
@@ -92,7 +127,40 @@ const puzzles = {
                 '    print("correct")'
             ],
             buggyLine: 0,
-            answer: 'password == "1234"'
+            answer: 'if password == "1234":'
+        },
+        {
+            lines: [
+                'age = 20',
+                'if age >= 18:',
+                '    print("adult"'
+            ],
+            buggyLine: 1,
+            answer: 'if age >= 18:'
+        },
+        {
+            lines: [
+                'nums = [1, 2, 3]',
+                'print(nums[3])'
+            ],
+            buggyLine: 1,
+            answer: 'print(nums[2])'
+        },
+        {
+            lines: [
+                'def add(a, b):',
+                '    retun a + b'
+            ],
+            buggyLine: 1,
+            answer: '    return a + b'
+        },
+        {
+            lines: [
+                'name = input("your name: ")',
+                'print("hi " + Name)'
+            ],
+            buggyLine: 1,
+            answer: 'print("hi " + name)'
         }
     ],
     'c++': [
@@ -103,7 +171,7 @@ const puzzles = {
                 '}'
             ],
             buggyLine: 1,
-            answer: 'items.size()'
+            answer: '  return items.size();'
         },
         {
             lines: [
@@ -112,7 +180,7 @@ const puzzles = {
                 '}'
             ],
             buggyLine: 0,
-            answer: 'i < numbers.size()'
+            answer: 'for (int i = 0; i < numbers.size(); i++) {'
         },
         {
             lines: [
@@ -121,7 +189,32 @@ const puzzles = {
                 '}'
             ],
             buggyLine: 0,
-            answer: 'a == b'
+            answer: 'if (a == b) {'
+        },
+        {
+            lines: [
+                'int x = 5',
+                'cout << x;'
+            ],
+            buggyLine: 0,
+            answer: 'int x = 5;'
+        },
+        {
+            lines: [
+                'int arr[5] = {1, 2, 3, 4, 5};',
+                'int last = arr[5];'
+            ],
+            buggyLine: 1,
+            answer: 'int last = arr[4];'
+        },
+        {
+            lines: [
+                'int square(int x) {',
+                '  x * x;',
+                '}'
+            ],
+            buggyLine: 1,
+            answer: 'return x * x;'
         }
     ],
     java: [
@@ -132,7 +225,7 @@ const puzzles = {
                 '}'
             ],
             buggyLine: 1,
-            answer: 'items.length'
+            answer: '  return items.length;'
         },
         {
             lines: [
@@ -141,7 +234,7 @@ const puzzles = {
                 '}'
             ],
             buggyLine: 0,
-            answer: 'i < arr.length'
+            answer: 'for (int i = 0; i < arr.length; i++) {'
         },
         {
             lines: [
@@ -150,10 +243,48 @@ const puzzles = {
                 '}'
             ],
             buggyLine: 0,
-            answer: 'name.equals("Alex")'
+            answer: 'if (name.equals("Alex")) {'
+        },
+        {
+            lines: [
+                'int x = 5',
+                'System.out.println(x);'
+            ],
+            buggyLine: 0,
+            answer: 'int x = 5;'
+        },
+        {
+            lines: [
+                'int[] arr = {1, 2, 3, 4, 5};',
+                'int last = arr[5];'
+            ],
+            buggyLine: 1,
+            answer: 'int last = arr[4];'
+        },
+        {
+            lines: [
+                'int square(int x) {',
+                '  x * x;',
+                '}'
+            ],
+            buggyLine: 1,
+            answer: '  return x * x;'
         }
     ]
 };
+
+function shuffleArray(arr) {
+    const shuffled = arr.slice();
+
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = shuffled[i];
+        shuffled[i] = shuffled[i];
+        shuffled[j] = temp;
+    }
+
+    return shuffled;
+}
 
 function startNight() {
     document.getElementById('nightLabel').textContent = 'night ' + currentNight;
@@ -162,7 +293,7 @@ function startNight() {
     updateClosenessBar();
 
     const puzzleCount = Math.min(currentNight, puzzles[selectLanguage].length);
-    nightQueue = puzzles[selectLanguage].slice(0, puzzleCount);
+    nightQueue = shuffleArray(puzzles[selectLanguage]).slice(0, puzzleCount);
     queueIndex = 0;
 
     loadPuzzle(nightQueue[queueIndex]);
@@ -187,6 +318,12 @@ function loadPuzzle(puzzle) {
 
         box.appendChild(lineDiv);
     });
+
+    updateProgressLabel();
+}
+
+function updateProgressLabel() {
+    document.getElementById('puzzleProgress').textContent = 'puzzle' + (queueIndex + 1) + '/' + nightQueue.length;
 }
 
 function openFixInput(lineDiv, puzzle) {
